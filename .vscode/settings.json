@@ -3,5 +3,6 @@
         "*.ml": "ocaml",
         "*.mli": "ocaml"
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "makefile.configureOnOpen": false
 }
