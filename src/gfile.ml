@@ -32,6 +32,7 @@ let compute_y id =
   300 + sgn * (delta / 2) * 100
   
 
+  
 let write_file path graph =
 
   (* Open a write-file. *)
@@ -51,6 +52,7 @@ let write_file path graph =
   
   close_out ff ;
   ()
+
 
 (* Reads a line with a node. *)
 let read_node graph line =
@@ -111,4 +113,25 @@ let from_file path =
   
   close_in infile ;
   final_graph
+;;
+
+(*
+https://stackoverflow.com/questions/40204547/suppress-a-warning-from-ocaml-in-a-specific-line
+Ignore unused warning (until I start to use it)
+*)
+[@@@ocaml.warning "-32"]
+let export (path: path) (graph: 'a graph) =  
+
+(* Open a write-file. *)
+  let ff = open_out path in
+
+  (* Write start section *)
+  fprintf ff "digraph finite_state_machine {\nfontname=\"Helvetica,Arial,sans-serif\"\nnode [fontname=\"Helvetica,Arial,sans-serif\"]\nedge [fontname=\"Helvetica,Arial,sans-serif\"]\nrankdir=LR;node [shape = doublecircle];\nnode [shape = circle];" ;
+
+  (* Lines containing arcs and nodes *)
+  let _ = e_fold graph (fun count arc -> fprintf ff "%d -> %d [label = \"%s\"];\n" arc.src arc.tgt arc.lbl ; count + 1) 0 in
   
+  fprintf ff "}" ;
+  
+  close_out ff ;
+  ()
