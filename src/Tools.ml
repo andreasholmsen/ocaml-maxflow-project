@@ -1,20 +1,59 @@
-(* Yes, we have to repeat open Graph. *)
 open Graph
 
-(* assert false is of type ∀α.α, so the type-checker is happy. *) (* Merci au prof qui m'a aidé*)
+type path = id list;;
+
+
+
+(*
+  Creates a clone of the graph with no arcs
+  
+  INPUT:
+      The graph
+
+  RETURNS:
+      The graph without arcs
+
+*)
 let clone_nodes (gr: 'a graph) = Graph.n_fold gr Graph.new_node Graph.empty_graph;;
 
-(* Iterates over all arcs and adds f to the arcs in the copy containing nodes but no arcs *)
-let gmap (gr: 'a graph) f = 
-  let gmap2 (gr2: 'a graph) =
-    Graph.e_fold gr (fun acc {src = src1; tgt = tgt1; lbl = lbl1} -> Graph.new_arc acc {src = src1; tgt = tgt1; lbl = f lbl1}) gr2
-  in
-  gmap2 (clone_nodes gr)
+
+(*
+  maps all arcs with the function f
+
+  INPUT:
+      The graph
+      The function to apply to lbl for all arcs
+  
+  RETURNS:
+      The new graph
+*)
+let gmap (gr: 'a graph) (map: ('a -> 'b)) =
+  Graph.e_fold gr (fun acc {src; tgt; lbl} -> Graph.new_arc acc {src; tgt; lbl = map lbl}) (clone_nodes gr)
 ;;
 
-(*If arc does not exist, create graph. If does exist, update to value lbl+n*)
-let add_arc (gr: int graph) (id1: id) (id2: id) (n: int) = 
-    match Graph.find_arc gr id1 id2 with
-    | None -> Graph.new_arc gr {src =id1; tgt = id2; lbl = n}
-    | Some {src = _; tgt = _; lbl = l} -> Graph.new_arc gr {src=id1; tgt = id2; lbl = l+n}
+
+(*
+Adds n to the lbl of an arc, or creates it if not found
+
+INPUT:
+    The graph to looks for arcs and return graph
+    The identifier for the destination node
+    The identifier for the target node
+    The integer we wish to update the label to
+
+RETURNS:
+    The graph with the added arc
+*)
+let add_arc (gr: int graph) (src: id) (tgt: id) (n: int) = 
+  match Graph.find_arc gr src tgt with
+  | None -> Graph.new_arc gr {src =src; tgt = tgt; lbl = n}
+  | Some {src =_; tgt = _; lbl} -> Graph.new_arc gr {src=src; tgt = tgt; lbl = lbl+n}
 ;;
+
+
+(*
+Converts string graph to int graph and vice-versa
+AKA between id graph and string graph
+*)
+let string_to_int_graph (graph: string graph) = gmap graph int_of_string;;
+let int_to_string_graph (graph: int graph) = gmap graph string_of_int;;

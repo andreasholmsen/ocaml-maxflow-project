@@ -1,35 +1,39 @@
 open Gfile
-    
-let () =
+open Ford_fulkerson
 
+let () =
   (* Check the number of command-line arguments *)
   if Array.length Sys.argv <> 5 then
     begin
       Printf.printf
         "\n ✻  Usage: %s infile source sink outfile\n\n%s%!" Sys.argv.(0)
         ("    🟄  infile  : input file containing a graph\n" ^
-         "    🟄  source  : identifier of the source vertex (used by the ford-fulkerson algorithm)\n" ^
-         "    🟄  sink    : identifier of the sink vertex (ditto)\n" ^
-         "    🟄  outfile : output file in which the result should be written.\n\n") ;
+        "    🟄  source  : identifier of the source vertex (used by the ford-fulkerson algorithm)\n" ^
+        "    🟄  sink    : identifier of the sink vertex (ditto)\n" ^
+        "    🟄  outfile : output file in which the result should be written.\n\n") ;
       exit 0
     end ;
 
-
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
-  
   let infile = Sys.argv.(1)
   and outfile = Sys.argv.(4)
-  
-  (* These command-line arguments are not used for the moment. *)
-  and _source = int_of_string Sys.argv.(2)
-  and _sink = int_of_string Sys.argv.(3)
+  and source = int_of_string Sys.argv.(2)
+  and sink = int_of_string Sys.argv.(3)
   in
 
   (* Open file *)
-  let graph = from_file infile in
+  let graph = from_file infile in  
+  Gfile.export "./insvg" graph;
+  write_file outfile graph;
 
-  (* Rewrite the graph that has been read. *)
-  let () = write_file outfile graph in
+  (* Run Ford-Fulkerson algorithm *)
+  let result = ford_fulkerson (Tools.string_to_int_graph graph) source sink in
+  let flow_graph = reconstruct_flow_graph (Tools.string_to_int_graph graph) result in
+  let out_graph = Tools.int_to_string_graph flow_graph in
+  Gfile.export "./outsvg" out_graph;
 
-  ()
+  (* Convert result graph back to string labels for output *)
 
+  (*
+      Gfile.export "./outsvg" (int_to_string_graph (Tools.gmap (string_to_int_graph graph) (fun lbl -> lbl + 3)));
+  *)

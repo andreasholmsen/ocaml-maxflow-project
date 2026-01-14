@@ -1,8 +1,8 @@
 .PHONY: all build format edit demo clean
 
 src?=0
-dst?=5
-graph?=graph1.txt
+dst?=12
+graph?=graph2.txt
 
 all: build
 
@@ -20,6 +20,14 @@ edit:
 demo: build
 	@echo "\n   ⚡  EXECUTING  ⚡\n"
 	./ftest.exe graphs/${graph} $(src) $(dst) outfile
+	@echo "\n   🥁  RESULT (content of outfile)  🥁\n"
+	@cat outfile
+
+demo2: build
+	@echo "\n   ⚡  EXECUTING  ⚡\n"
+	./ftest.exe graphs/${graph} $(src) $(dst) outfile
+	@dot -Tsvg outsvg > outfile.svg
+	@dot -Tsvg insvg > infile.svg
 	@echo "\n   🥁  RESULT (content of outfile)  🥁\n"
 	@cat outfile
 
