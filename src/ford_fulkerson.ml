@@ -35,14 +35,14 @@ let rec find_path (gr: int graph) (forbidden: id list) (src: id) (dst: id) =
   else if List.mem src forbidden then None
   else
     let neighbors = get_next gr forbidden src in
-    let rec aux arcs =
-      match arcs with
-      | [] -> None
-      | arc :: rest -> match find_path gr (src :: forbidden) arc.tgt dst with
-                        | Some path -> Some (src :: path)
-                        | None -> aux rest
-    in
-      aux neighbors
+      let rec aux arcs =
+        match arcs with
+        | [] -> None
+        | arc :: rest -> match find_path gr (src :: forbidden) arc.tgt dst with
+                          | Some path -> Some (src :: path)
+                          | None -> aux rest
+      in
+        aux neighbors
 ;;
 
 
