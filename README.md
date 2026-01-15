@@ -1,22 +1,13 @@
-Base project for Ocaml project on Ford-Fulkerson. This project contains some simple configuration files to facilitate editing Ocaml in VSCode.
+## Ford-Fulkerson Algorithm, Ocaml Implementation
 
-To use, you should install the *OCaml Platform* extension in VSCode.
-Then open VSCode in the root directory of this repository (command line: `code path/to/ocaml-maxflow-project`).
+The algorithm works by using the main loop `ford_fulkerson` to continually find paths (`find_path`), calculate a minimum flow (`path_min_capacity`) and create a residual graph ("wasted potential"). When the residual graph is complete, the function `reconstruct_flow_graph` outputs the new graph with the actual max flows (original values - the values of the residual graph).
 
-Features :
- - full compilation as VSCode build task (Ctrl+Shift+b)
- - highlights of compilation errors as you type
- - code completion
- - view of variable types
+The project focuses on code readability more than efficiency.
 
+## Compilation
 
-A [`Makefile`](Makefile) provides some useful commands:
+To compile the project, run `dune build` and afterwards, you can run the following syntax:
 
- - `make build` to compile. This creates an `ftest.exe` executable
- - `make demo` to run the `ftest` program with some arguments
- - `make format` to indent the entire project
- - `make edit` to open the project in VSCode
- - `make clean` to remove build artifacts
+- `./ftest.exe <graph_path> <src> <dst> <outputname>`
 
-In case of trouble with the VSCode extension (e.g. the project does not build, there are strange mistakes), a common workaround is to (1) close vscode, (2) `make clean`, (3) `make build` and (4) reopen vscode (`make edit`).
-
+I often just run `make test src=<src> dst=<dst> graph=<graph_name>` to automatically run `dot` as well. Visualizing the `outfile` in .svg format
