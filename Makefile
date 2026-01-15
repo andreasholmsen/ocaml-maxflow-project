@@ -28,8 +28,7 @@ test: build
 	./ftest.exe graphs/${graph} $(src) $(dst) outfile
 	@dot -Tsvg outsvg > outfile.svg
 	@dot -Tsvg insvg > infile.svg
-	@echo "\n   🥁  RESULT (content of outfile)  🥁\n"
-	@cat outfile
+	rm insvg outsvg
 
 clean:
 	find -L . -name "*~" -delete
