@@ -7,7 +7,7 @@ open Graph
   INPUT:
     The graph
     The list of forbidden nodes
-    The node you want the arcs from
+    The node from which you want the arcs
 
   RETURNS:
     List of outgoing arcs from src
@@ -24,8 +24,8 @@ let get_next (gr: int graph) (forbidden: id list) (src: id)=
   INPUT:
     The graph
     The list of forbidden nodes
-    The src Node
-    The Destination Node
+    The source node
+    The destination node
 
   RETURNS:
     A list of ids that construct a correct path
@@ -47,14 +47,14 @@ let rec find_path (gr: int graph) (forbidden: id list) (src: id) (dst: id) =
 
 
 (*
-  Takes the lbl on all arcs on a path and returns the minimum
+  Takes the label on all arcs in a path and returns the minimum
 
   INPUT:
     The graph
-    The path (list of integers)
+    The path (list of ids)
 
   RETURNS:
-    The integer of the minimal lbl
+    The mimimum label value
 *)
 let path_min_capacity gr path = 
   let rec aux min path = 
@@ -68,15 +68,15 @@ let path_min_capacity gr path =
     aux max_int path;;
 
   (*
-  Updates the residual graph along the path for the flow
+  Updates the residual graph along the path by the flow
 
   INPUT:
     The graph
-    The path to update
-    The flow to add
+    The path to update along
+    The flow to augment
 
   RETURNS:
-    Graph with updated flow
+    Graph with updated flows
   *)
 let rec update_residual_graph gr path flow =
   match path with
@@ -88,13 +88,13 @@ let rec update_residual_graph gr path flow =
                           flow;; 
 
 (*
-  Deletes all arcs with lbl = 0
+  Deletes all arcs with label = 0
 
   INPUTS:
     The graph
 
   RETURNS:
-    The graphs (without 0-arcs)
+    The graph (without 0-arcs)
 
 let delete_zero_arcs gr =
   let rec aux acu arcs =
@@ -106,15 +106,15 @@ let delete_zero_arcs gr =
 *)
 
 (*
-  Main loop for the ford fulkerson algo
+  Main loop for the Ford-Fulkerson algorithm
 
   INPUTS:
     The graph
     The source node
-    The destination
+    The destination node
 
   RETURNS:
-    The residual graph
+    The residual graph after max flow
 *)
 let ford_fulkerson gr src dst =
   let rec aux residual_graph flow =
@@ -130,14 +130,13 @@ let ford_fulkerson gr src dst =
 ;;
 
 (*
-  Uses the graph and the residual graph to create the final flow graph
+  Uses the original and residual graph to create the final flow graph
 
   INPUT:
     The original graph
-    The graph after the ford_fulkerson algo
-
+    The graph after the Ford-Fulkerson algorithm
   RETURNS:
-    A clean new graph with the correct flows
+    A new graph with the correct flows
 *)
 let reconstruct_flow_graph gr residual =
   Graph.e_fold gr
