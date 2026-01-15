@@ -23,7 +23,7 @@ demo: build
 	@echo "\n   🥁  RESULT (content of outfile)  🥁\n"
 	@cat outfile
 
-demo2: build
+test: build
 	@echo "\n   ⚡  EXECUTING  ⚡\n"
 	./ftest.exe graphs/${graph} $(src) $(dst) outfile
 	@dot -Tsvg outsvg > outfile.svg
