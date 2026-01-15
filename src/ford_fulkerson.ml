@@ -121,9 +121,9 @@ let ford_fulkerson gr src dst =
     | None -> residual_graph
     | Some path ->
         let min_cap = path_min_capacity residual_graph path in
-        let updated_graph = update_residual_graph residual_graph path min_cap in
-        (*let cleaned_graph = delete_zero_arcs updated_graph in *)
-        aux updated_graph (flow + min_cap)
+          let updated_graph = update_residual_graph residual_graph path min_cap in
+            (*let cleaned_graph = delete_zero_arcs updated_graph in *)
+              aux updated_graph (flow + min_cap)
   in
     aux gr 0
 ;;
@@ -146,10 +146,8 @@ let reconstruct_flow_graph gr residual =
         | Some a -> a.lbl
         | None -> 0
       in
-      let flow = arc.lbl - res_cap in
-      if flow > 0 then
-        Tools.add_arc acc arc.src arc.tgt flow
-      else
-        acc
-    )
-    (Tools.clone_nodes gr)
+        let flow = arc.lbl - res_cap in
+          if flow > 0 then
+            Tools.add_arc acc arc.src arc.tgt flow
+          else
+            acc) (Tools.clone_nodes gr)
