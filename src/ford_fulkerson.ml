@@ -111,9 +111,10 @@ let delete_zero_arcs gr =
   INPUTS:
     The graph
     The source node
+    The destination
 
   RETURNS:
-    The maximum flow graph
+    The residual graph
 *)
 let ford_fulkerson gr src dst =
   let rec aux residual_graph flow =
